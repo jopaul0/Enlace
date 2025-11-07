@@ -46,7 +46,7 @@
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>3.1.0</version>
                 <configuration>
-                    <mainClass>br.edu.fatec.Enlace.Main</mainClass>
+                    <mainClass>br.edu.fatec.Main</mainClass>
                 </configuration>
             </plugin>
         </plugins>
