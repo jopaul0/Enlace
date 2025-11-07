@@ -5,7 +5,8 @@ public class TestLombok {
         Mother mae = new Mother();
 
         mae.setName("Claudia");
-        mae.setId(1L);
+        int valor =1;
+        mae.setId((long) valor);
         mae.setEmail("pelega@hotmail.com");
         mae.setPhone("12992196356");
 
