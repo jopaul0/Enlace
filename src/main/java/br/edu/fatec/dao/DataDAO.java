@@ -9,6 +9,12 @@ import java.util.List;
 import static br.edu.fatec.factory.ConnectionFactory.getConnection;
 
 public abstract class DataDAO<T> {
+
+    // Abstracts
+    protected abstract List<T> mapResultSetToList(ResultSet rs) throws SQLException;
+    protected abstract String getTableName();
+
+
     protected void executeUpdate(String sql, Object... params) throws SQLException {
         try (Connection conn = getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -36,13 +42,10 @@ public abstract class DataDAO<T> {
         }
     }
 
-    protected abstract List<T> mapResultSetToList(ResultSet rs) throws SQLException;
-
     public T findById(int id) throws SQLException {
         String sql = "SELECT * FROM " + getTableName() + " WHERE id = ?";
         List<T> results = executeQuery(sql, id);
         return results.isEmpty() ? null : results.get(0);
     }
 
-    protected abstract String getTableName();
 }
