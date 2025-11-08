@@ -48,4 +48,13 @@ public abstract class DataDAO<T> {
         return results.isEmpty() ? null : results.get(0);
     }
 
+    public List<T> findAll() throws  SQLException{
+        String sql = "SELECT * FROM " + getTableName();
+        return executeQuery(sql);
+    }
+
+    public void deleteById(int id) throws SQLException{
+        String sql = "DELETE FROM " + getTableName() + "WHERE id = ?";
+        executeUpdate(sql, id);
+    }
 }
