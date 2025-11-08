@@ -27,7 +27,7 @@ public class MotherDAO extends DataDAO<Mother> {
     }
 
     public void insert(Mother mother) throws SQLException{
-        String sql = "insert into mothers (name,cpf,email,phone);";
+        String sql = "insert into mothers (name,cpf,email,phone) values (?,?,?,?);";
         executeUpdate(sql, mother.getName(), mother.getCpf(), mother.getEmail(), mother.getPhone());
     }
 
