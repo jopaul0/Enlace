@@ -41,7 +41,15 @@ public class MotherDAO extends DataDAO<Mother> {
         executeUpdate(sql, mother.getId());
     }
 
+    public List<Mother> findAllActives() throws  SQLException{
+        String sql = "SELECT * FROM mothers where status = 'active'";
+        return executeQuery(sql);
+    }
 
+    public List<Mother> findBirthdayMother() throws  SQLException{
+        String sql = "SELECT * FROM mothers WHERE MONTH(date) = MONTH(GETDATE())";
+        return executeQuery(sql);
+    }
 
     public void softDelete(Mother mother) throws SQLException{
         String sql = "update mothers set status='inactive' where id = ?";
