@@ -55,7 +55,7 @@ CREATE TABLE `meets` (
   `id` int NOT NULL AUTO_INCREMENT,
   `date` timestamp NOT NULL,
   `address` varchar(200) NOT NULL,
-  `status` enum('active','inactive') DEFAULT 'active',
+  `status` enum('pending','canceled','completed') DEFAULT 'pending',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -82,6 +82,8 @@ CREATE TABLE `mothers` (
   `cpf` varchar(14) NOT NULL,
   `email` varchar(100) NOT NULL,
   `phone` varchar(20) NOT NULL,
+  `birthday` date NOT NULL,
+  `status` enum('active','inactive') DEFAULT 'active',
   PRIMARY KEY (`id`),
   UNIQUE KEY `cpf` (`cpf`),
   UNIQUE KEY `email` (`email`),
@@ -109,9 +111,10 @@ CREATE TABLE `services` (
   `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(100) NOT NULL,
   `description` text,
+  `status` enum('active','inactive') DEFAULT 'active',
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -120,7 +123,6 @@ CREATE TABLE `services` (
 
 LOCK TABLES `services` WRITE;
 /*!40000 ALTER TABLE `services` DISABLE KEYS */;
-INSERT INTO `services` VALUES (1,'MÚSICA','Responsável pelos cânticos e momentos musicais do encontro'),(2,'RECEPÇÃO DE MÃES','Responsável por acolher e recepcionar as mães participantes'),(3,'ACOLHIDA','Equipe que realiza a acolhida e boas-vindas no início do encontro'),(4,'TERÇO','Responsável pela condução do momento de oração do terço'),(5,'FORMAÇÃO','Equipe encarregada das reflexões e formações espirituais'),(6,'MOMENTO ORACIONAL','Coordena os momentos de oração durante o encontro'),(7,'PROCLAMAÇÃO DA VITÓRIA','Responsável pela condução e organização deste momento espiritual'),(8,'SORTEIO DAS FLORES','Realiza e organiza o sorteio simbólico de flores entre as participantes'),(9,'ENCERRAMENTO','Organiza o encerramento e os agradecimentos finais do encontro'),(10,'ARRUMAÇÃO CAPELA','Responsável pela limpeza e organização do espaço sagrado'),(11,'QUEIMA DOS PEDIDOS','Conduz o momento simbólico de queima dos pedidos feitos durante o evento'),(12,'COMPRAS FLORES','Responsável pela compra e preparo das flores para o encontro');
 /*!40000 ALTER TABLE `services` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -133,4 +135,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-11-07 22:55:56
+-- Dump completed on 2025-11-08 10:10:09
