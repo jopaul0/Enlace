@@ -43,4 +43,9 @@ public class MotherDAO extends DataDAO<Mother> {
 
 
 
+    public void softDelete(Mother mother) throws SQLException{
+        String sql = "update mothers set status='inactive' where id = ?";
+        executeUpdate(sql, mother.getId());
+    }
+
 }
