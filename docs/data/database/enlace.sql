@@ -53,9 +53,9 @@ DROP TABLE IF EXISTS `meets`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `meets` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `TIMESTAMP` date DEFAULT NULL,
-  `address` varchar(200) DEFAULT NULL,
-  `status` varchar(50) DEFAULT NULL,
+  `date` timestamp NOT NULL,
+  `address` varchar(200) NOT NULL,
+  `status` enum('active','inactive') DEFAULT 'active',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -78,11 +78,14 @@ DROP TABLE IF EXISTS `mothers`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `mothers` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `name` varchar(100) DEFAULT NULL,
-  `cpf` varchar(14) DEFAULT NULL,
-  `email` varchar(100) DEFAULT NULL,
-  `phone` varchar(20) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `name` varchar(100) NOT NULL,
+  `cpf` varchar(14) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `phone` varchar(20) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `cpf` (`cpf`),
+  UNIQUE KEY `email` (`email`),
+  UNIQUE KEY `phone` (`phone`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -104,9 +107,10 @@ DROP TABLE IF EXISTS `services`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `services` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `name` varchar(100) DEFAULT NULL,
+  `name` varchar(100) NOT NULL,
   `description` text,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name` (`name`)
 ) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -129,4 +133,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-11-07 11:32:16
+-- Dump completed on 2025-11-07 22:55:56
