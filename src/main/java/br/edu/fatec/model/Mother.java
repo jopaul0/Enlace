@@ -14,6 +14,7 @@ import lombok.ToString;
 public class Mother {
     private Long id;
     private String name;
+    private String cpf;
     private String email;
     private String phone;
 }
