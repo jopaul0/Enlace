@@ -11,7 +11,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class Services {
+public class Service {
     private Long id;
     private String name;
     private String description;
