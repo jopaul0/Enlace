@@ -18,23 +18,23 @@
 
 CREATE TABLE mothers (
   id INT PRIMARY KEY AUTO_INCREMENT,
-  name VARCHAR(100),
-  cpf VARCHAR(14),
-  email VARCHAR(100),
-  phone VARCHAR(20)
+  name VARCHAR(100) NOT NULL,
+  cpf VARCHAR(14) NOT NULL UNIQUE,
+  email VARCHAR(100) NOT NULL UNIQUE,
+  phone VARCHAR(20) NOT NULL UNIQUE
 );
 
 CREATE TABLE services (
   id INT PRIMARY KEY AUTO_INCREMENT,
-  name VARCHAR(100),
+  name VARCHAR(100) NOT NULL UNIQUE,
   description TEXT
 );
 
 CREATE TABLE meets (
   id INT PRIMARY KEY AUTO_INCREMENT,
-  TIMESTAMP DATE,
-  address VARCHAR(200),
-  status VARCHAR(50)
+  date TIMESTAMP NOT NULL,
+  address VARCHAR(200) NOT NULL,
+  status ENUM('active','inactive') DEFAULT 'active'
 );
 
 CREATE TABLE enlace (
