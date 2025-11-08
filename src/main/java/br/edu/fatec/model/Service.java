@@ -1,5 +1,6 @@
 package br.edu.fatec.model;
 
+import br.edu.fatec.enums.DefaultStatus;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.NoArgsConstructor;
@@ -15,4 +16,5 @@ public class Service {
     private Long id;
     private String name;
     private String description;
+    private DefaultStatus status;
 }
