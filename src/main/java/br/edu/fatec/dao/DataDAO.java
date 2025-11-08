@@ -43,7 +43,7 @@ public abstract class DataDAO<T> {
     }
 
     public T findById(int id) throws SQLException {
-        String sql = "SELECT * FROM " + getTableName() + " WHERE id = ?";
+        String sql = "SELECT * FROM " + getTableName() + " WHERE id = ? and status = 'active'";
         List<T> results = executeQuery(sql, id);
         return results.isEmpty() ? null : results.get(0);
     }
