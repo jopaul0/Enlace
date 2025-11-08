@@ -25,4 +25,22 @@ public class MotherDAO extends DataDAO<Mother> {
         }
         return mothers;
     }
+
+    public void insert(Mother mother) throws SQLException{
+        String sql = "insert into mothers (name,cpf,email,phone);";
+        executeUpdate(sql, mother.getName(), mother.getCpf(), mother.getEmail(), mother.getPhone());
+    }
+
+    public void update(Mother mother) throws SQLException{
+        String sql = "update mothers set name = ?, cpf = ?, email = ?, phone = ? where id = ?;";
+        executeUpdate(sql, mother.getName(), mother.getCpf(), mother.getEmail(), mother.getPhone(), mother.getId());
+    }
+
+    public void delete(Mother mother) throws SQLException{
+        String sql = "delete from mothers where id = ?";
+        executeUpdate(sql, mother.getId());
+    }
+
+
+
 }
