@@ -1,9 +1,11 @@
 package br.edu.fatec.dao;
 
+import br.edu.fatec.enums.DefaultStatus;
 import br.edu.fatec.model.Mother;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,8 +21,17 @@ public class MotherDAO extends DataDAO<Mother> {
         List<Mother> mothers = new ArrayList<>();
         while (rs.next()) {
             Mother mother = new Mother();
+
             mother.setId((long) rs.getInt("id"));
-            mother.setName(rs.getString("nome"));
+            mother.setName(rs.getString("name"));
+            mother.setPhone(rs.getString("phone"));
+            mother.setCpf(rs.getString("cpf"));
+            mother.setEmail(rs.getString("email"));
+
+            mother.setStatus(DefaultStatus.valueOf(rs.getString("status")));
+            mother.setBirthday(rs.getObject("birthday", LocalDate.class));
+
+
             mothers.add(mother);
         }
         return mothers;
@@ -47,7 +58,7 @@ public class MotherDAO extends DataDAO<Mother> {
     }
 
     public List<Mother> findBirthdayMother() throws  SQLException{
-        String sql = "SELECT * FROM mothers WHERE MONTH(date) = MONTH(GETDATE())";
+        String sql = "SELECT * FROM mothers WHERE MONTH(birthday) = MONTH(NOW())";
         return executeQuery(sql);
     }
 

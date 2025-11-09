@@ -9,7 +9,7 @@ import java.time.LocalDate;
 public class TestDAO {
     public static void main(String[] args) throws SQLException {
         Mother mae = new Mother();
-        mae.setId((long) 1);
+        mae.setId((long) 2);
         mae.setName("claudia");
         mae.setCpf("111111111111");
         mae.setEmail("pelega@hotmail.com");
@@ -19,6 +19,7 @@ public class TestDAO {
 
         MotherDAO maedao = new MotherDAO();
 
-        maedao.delete(mae);
+        maedao.update(mae);
+        System.out.println(maedao.findBirthdayMother());
     }
 }
