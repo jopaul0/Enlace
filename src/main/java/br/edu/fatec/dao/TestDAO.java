@@ -14,12 +14,13 @@ public class TestDAO {
         mae.setCpf("111111111111");
         mae.setEmail("pelega@hotmail.com");
         mae.setPhone("12992196356");
+        mae.setAddress("Rua dos Elfos, 49");
         mae.setBirthday(LocalDate.of(1983, 8, 14));
         mae.setStatus(DefaultStatus.inactive);
 
         MotherDAO maedao = new MotherDAO();
 
-        maedao.update(mae);
+        maedao.insert(mae);
         System.out.println(maedao.findBirthdayMother());
     }
 }
