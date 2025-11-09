@@ -2,13 +2,12 @@ package br.edu.fatec.util;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 
-public final class DateUtil {
+public final class DateUtils {
 
     private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
-    private DateUtil() {}
+    private DateUtils() {}
 
     public static String formatDate(LocalDate date){
         try{
