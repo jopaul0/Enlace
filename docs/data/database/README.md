@@ -22,6 +22,7 @@ CREATE TABLE mothers (
   cpf VARCHAR(14) NOT NULL UNIQUE,
   email VARCHAR(100) NOT NULL UNIQUE,
   phone VARCHAR(20) NOT NULL UNIQUE,
+  address VARCHAR(150) NOT NULL,
   birthday DATE NOT NULL,
   status ENUM('active', 'inactive') DEFAULT 'active'
 );

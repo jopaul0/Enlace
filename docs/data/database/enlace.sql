@@ -82,6 +82,7 @@ CREATE TABLE `mothers` (
   `cpf` varchar(14) NOT NULL,
   `email` varchar(100) NOT NULL,
   `phone` varchar(20) NOT NULL,
+  `address` varchar(150) NOT NULL,
   `birthday` date NOT NULL,
   `status` enum('active','inactive') DEFAULT 'active',
   PRIMARY KEY (`id`),
