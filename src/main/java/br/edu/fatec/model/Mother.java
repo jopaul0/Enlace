@@ -20,6 +20,7 @@ public class Mother {
     private String cpf;
     private String email;
     private String phone;
+    private String address;
     private LocalDate birthday;
     private DefaultStatus status;
 }

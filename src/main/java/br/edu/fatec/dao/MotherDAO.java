@@ -38,13 +38,13 @@ public class MotherDAO extends DataDAO<Mother> {
     }
 
     public void insert(Mother mother) throws SQLException{
-        String sql = "insert into mothers (name,cpf,email,phone,birthday,status) values (?,?,?,?,?,?);";
-        executeUpdate(sql, mother.getName(), mother.getCpf(), mother.getEmail(), mother.getPhone(), mother.getBirthday(), mother.getStatus().name());
+        String sql = "insert into mothers (name,cpf,email,phone,address,birthday,status) values (?,?,?,?,?,?,?);";
+        executeUpdate(sql, mother.getName(), mother.getCpf(), mother.getEmail(), mother.getPhone(),mother.getAddress(), mother.getBirthday(), mother.getStatus().name());
     }
 
     public void update(Mother mother) throws SQLException{
-        String sql = "update mothers set name = ?, cpf = ?, email = ?, phone = ?, birthday = ?, status = ? where id = ?;";
-        executeUpdate(sql, mother.getName(), mother.getCpf(), mother.getEmail(), mother.getPhone(),mother.getBirthday(), mother.getStatus().name(), mother.getId());
+        String sql = "update mothers set name = ?, cpf = ?, email = ?, phone = ?, address = ?, birthday = ?, status = ? where id = ?;";
+        executeUpdate(sql, mother.getName(), mother.getCpf(), mother.getEmail(), mother.getPhone(),mother.getAddress(),mother.getBirthday(), mother.getStatus().name(), mother.getId());
     }
 
     public void delete(Mother mother) throws SQLException{
