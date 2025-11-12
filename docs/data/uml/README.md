@@ -2,5 +2,5 @@
 
 ## Diagrama UML
 
-<img src='./UML'>
+<img src='./UML.png'>
 
