@@ -1,26 +1,37 @@
 package br.edu.fatec.dao;
 
 import br.edu.fatec.enums.DefaultStatus;
+import br.edu.fatec.model.Enlace;
 import br.edu.fatec.model.Mother;
+import com.google.gson.*;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.List;
 
 public class TestDAO {
     public static void main(String[] args) throws SQLException {
-        Mother mae = new Mother();
-        mae.setId((long) 2);
-        mae.setName("claudia");
-        mae.setCpf("111111111111");
-        mae.setEmail("pelega@hotmail.com");
-        mae.setPhone("12992196356");
-        mae.setAddress("Rua dos Elfos, 49");
-        mae.setBirthday(LocalDate.of(1983, 8, 14));
-        mae.setStatus(DefaultStatus.inactive);
+        String json = "[{\"mother\": {\"id\": 1, \"name\": \"claudia\", \"email\": \"pelega@hotmail.com\", \"phone\": \"12992196356\"}, \"service\": {\"id\": 1, \"name\": \"Apoio Psicológico\", \"description\": \"Sessões de suporte emocional e psicológico.\"}, \"id\": 1}, {\"mother\": {\"id\": 2, \"name\": \"Ana Silva\", \"email\": \"ana.silva@email.com\", \"phone\": \"(11) 98765-4321\"}, \"service\": {\"id\": 1, \"name\": \"Apoio Psicológico\", \"description\": \"Sessões de suporte emocional e psicológico.\"}, \"id\": 1}]";
 
-        MotherDAO maedao = new MotherDAO();
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapter(LocalDate.class, (JsonDeserializer<LocalDate>)
+                        (jsonEl, type, ctx) -> LocalDate.parse(jsonEl.getAsJsonPrimitive().getAsString()))
+                .registerTypeAdapter(LocalDate.class, (JsonSerializer<LocalDate>)
+                        (src, type, ctx) -> new JsonPrimitive(src.toString()))
+                .create();
 
-        maedao.insert(mae);
-        System.out.println(maedao.findBirthdayMother());
+        Type listType = new TypeToken<List<Enlace>>() {
+        }.getType();
+        List<Enlace> enlaces = gson.fromJson(json, listType);
+
+        for (Enlace enlace : enlaces) {
+            System.out.println("------------------");
+            System.out.println(enlace.getMother().toString());
+            System.out.println("+");
+            System.out.println(enlace.getService().toString());
+            System.out.println("------------------");
+        }
     }
 }
