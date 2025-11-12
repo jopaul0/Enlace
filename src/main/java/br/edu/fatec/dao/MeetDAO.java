@@ -3,6 +3,8 @@ package br.edu.fatec.dao;
 import br.edu.fatec.enums.MeetStatus;
 import br.edu.fatec.model.Enlace;
 import br.edu.fatec.model.Meet;
+import br.edu.fatec.model.Mother;
+import br.edu.fatec.model.Service;
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 
@@ -18,7 +20,7 @@ public class MeetDAO extends DataDAO<Meet> {
 
     @Override
     protected String getTableName() {
-        return "mothers";
+        return "meets";
     }
 
     @Override
@@ -137,5 +139,26 @@ public class MeetDAO extends DataDAO<Meet> {
                 "    m.id, m.date, m.address, m.status;";
         List<Meet> results = executeQuery(sql, id);
         return results.isEmpty() ? null : results.get(0);
+    }
+
+    public void insert(Meet meet, Mother mother, Service service) throws SQLException{
+        String sql = "insert into meets (date, address) values (?,?);"
+                + "insert into enlaces (idservices, idmothers, idmeets) values(?, ?, LAST_INSERT_ID());";
+        executeUpdate(sql, meet.getDate(), meet.getAddress(), service.getId(), mother.getId());
+    }
+
+    public void update(Meet meet) throws SQLException{
+        String sql = "update meets set date = ?, address = ?, status = ? where id = ?";
+        executeUpdate(sql, meet.getDate(), meet.getAddress(), meet.getStatus().name(), meet.getId());
+    }
+
+    public void softDelete(Meet meet) throws SQLException{
+        String sql = "update meets set status = 'canceled' where id = ?";
+        executeUpdate(sql, meet.getId());
+    }
+
+    public void setCompleted(Meet meet) throws SQLException{
+        String sql = "update meets set status = 'completed' where id = ?";
+        executeUpdate(sql, meet.getId());
     }
 }
