@@ -17,6 +17,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @ToString
 public class Enlace {
+    private Long id;
     private Service service;
     private Mother mother;
 }

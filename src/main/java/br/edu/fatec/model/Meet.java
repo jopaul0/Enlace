@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.ToString;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -19,4 +20,5 @@ public class Meet {
     private LocalDateTime date;
     private String address;
     private MeetStatus status;
+    private List<Enlace> enlaces;
 }
