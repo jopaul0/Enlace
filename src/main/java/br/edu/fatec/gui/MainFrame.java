@@ -27,6 +27,19 @@ public class MainFrame extends JFrame {
         tabbedPane.addTab("Serviços", new ServicePanel());
         tabbedPane.addTab("Encontros", new MeetPanel());
 
+        JMenuBar menuBar = new JMenuBar();
+        JMenu helpMenu = new JMenu("Ajuda");
+        JMenuItem aboutItem = new JMenuItem("Sobre e Especificações");
+
+        aboutItem.addActionListener(e -> {
+            HelpDialog dialog = new HelpDialog(this);
+            dialog.setVisible(true);
+        });
+
+        helpMenu.add(aboutItem);
+        menuBar.add(helpMenu);
+        setJMenuBar(menuBar);
+
         getContentPane().add(tabbedPane, BorderLayout.CENTER);
     }
 
