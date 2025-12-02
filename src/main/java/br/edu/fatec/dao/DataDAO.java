@@ -1,9 +1,6 @@
 package br.edu.fatec.dao;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.List;
 
 import static br.edu.fatec.factory.ConnectionFactory.getConnection;
@@ -12,6 +9,7 @@ public abstract class DataDAO<T> {
 
     // Abstracts
     protected abstract List<T> mapResultSetToList(ResultSet rs) throws SQLException;
+
     protected abstract String getTableName();
 
 
@@ -21,6 +19,27 @@ public abstract class DataDAO<T> {
 
             setParameters(ps, params);
             ps.executeUpdate();
+        }
+    }
+
+    protected Long executeInsertAndReturnKey(String sql, Object... params) throws SQLException {
+        try (Connection conn = getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
+            setParameters(ps, params);
+            int affectedRows = ps.executeUpdate();
+
+            if (affectedRows == 0) {
+                throw new SQLException("Falha ao criar registro, nenhuma linha afetada.");
+            }
+
+            try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    return generatedKeys.getLong(1);
+                } else {
+                    throw new SQLException("Falha ao criar registro, ID não obtido.");
+                }
+            }
         }
     }
 
@@ -48,12 +67,12 @@ public abstract class DataDAO<T> {
         return results.isEmpty() ? null : results.get(0);
     }
 
-    public List<T> findAll() throws  SQLException{
+    public List<T> findAll() throws SQLException {
         String sql = "SELECT * FROM " + getTableName();
         return executeQuery(sql);
     }
 
-    public void deleteById(int id) throws SQLException{
+    public void deleteById(int id) throws SQLException {
         String sql = "DELETE FROM " + getTableName() + "WHERE id = ?";
         executeUpdate(sql, id);
     }

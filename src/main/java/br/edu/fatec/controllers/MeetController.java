@@ -1,4 +1,5 @@
 package br.edu.fatec.controllers;
+
 import java.util.List;
 
 import br.edu.fatec.model.Meet;
@@ -13,58 +14,57 @@ public class MeetController {
 
 
     // ---- Empty constructor as usual ---- //
-    public MeetController(){}
+    public MeetController() {
+    }
 
 
     // -------- Introducing the MeetController methods ------- //
 
-    public boolean addMeet(Meet  meet , Mother mother , Service service) throws  Exception {
-        meetDAO.insert(meet, mother, service);
+    public boolean addMeet(Meet meet) throws Exception {
+        meetDAO.insert(meet);
         return true;
     }
 
-    public void updateMeet(Meet meet) throws Exception{
+    public void updateMeet(Meet meet) throws Exception {
         Meet existingMeet = findById(meet.getId());
-        if ( existingMeet == null ){
+        if (existingMeet == null) {
             System.out.println("Meet not found");
 
-        }
-        else{
+        } else {
             meetDAO.update(meet);
 
-    }}
+        }
+    }
 
-    public boolean softDelete(Meet meet) throws  Exception{
+    public boolean softDelete(Meet meet) throws Exception {
         Meet existingMeet = findById(meet.getId());
-        if ( existingMeet == null ){
+        if (existingMeet == null) {
             System.out.println("Meet not found");
             return false;
-        }
-        else{
+        } else {
             meetDAO.softDelete(meet);
             return true;
         }
     }
 
-    public boolean setCompleted(Meet meet) throws Exception{
+    public boolean setCompleted(Meet meet) throws Exception {
         Meet existingMeet = findById(meet.getId());
-        if ( existingMeet == null ) {
+        if (existingMeet == null) {
             System.out.println("Meet not found");
             return false;
 
-        }
-        else{
+        } else {
             meetDAO.setCompleted(meet);
             return true;
         }
     }
 
-    public List<Meet> getAllMeets() throws Exception{
+    public List<Meet> getAllMeets() throws Exception {
         return meetDAO.findAll();
     }
 
-    public Meet findById(Long id) throws Exception{
-        if ( id == null) return null;
+    public Meet findById(Long id) throws Exception {
+        if (id == null) return null;
         return meetDAO.findById(id.intValue());
     }
 

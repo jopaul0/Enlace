@@ -45,9 +45,13 @@ public class MeetDAO extends DataDAO<Meet> {
             String enlaceJson = rs.getString("enlace");
             Type listType = new TypeToken<List<Enlace>>() {
             }.getType();
-            List<Enlace> enlaces = gson.fromJson(enlaceJson, listType);
 
-            meet.setEnlaces(enlaces);
+            if (enlaceJson == null || enlaceJson.isEmpty() || "null".equalsIgnoreCase(enlaceJson)) {
+                meet.setEnlaces(new ArrayList<>());
+            } else {
+                List<Enlace> enlaces = gson.fromJson(enlaceJson, listType);
+                meet.setEnlaces(enlaces);
+            }
 
             meets.add(meet);
         }
@@ -55,7 +59,7 @@ public class MeetDAO extends DataDAO<Meet> {
     }
 
     @Override
-    public List<Meet> findAll() throws  SQLException{
+    public List<Meet> findAll() throws SQLException {
         String sql = "SELECT\n" +
                 "    m.id AS id,\n" +
                 "    m.date AS date,\n" +
@@ -141,23 +145,36 @@ public class MeetDAO extends DataDAO<Meet> {
         return results.isEmpty() ? null : results.get(0);
     }
 
-    public void insert(Meet meet, Mother mother, Service service) throws SQLException{
-        String sql = "insert into meets (date, address) values (?,?);"
-                + "insert into enlaces (idservices, idmothers, idmeets) values(?, ?, LAST_INSERT_ID());";
-        executeUpdate(sql, meet.getDate(), meet.getAddress(), service.getId(), mother.getId());
+    public void insert(Meet meet) throws SQLException {
+        if (meet.getEnlaces() == null || meet.getEnlaces().isEmpty()) {
+            throw new SQLException("A Meet must have at least one Enlace.");
+        }
+
+        String meetSql = "INSERT INTO meets (date, address, status) VALUES (?, ?, ?)";
+
+        Long meetId = executeInsertAndReturnKey(meetSql, meet.getDate(), meet.getAddress(), meet.getStatus().name());
+
+        String enlaceSql = "INSERT INTO enlace (idservices, idmothers, idmeets) VALUES (?, ?, ?)";
+
+        for (Enlace enlace : meet.getEnlaces()) {
+            executeUpdate(enlaceSql,
+                    enlace.getService().getId(),
+                    enlace.getMother().getId(),
+                    meetId);
+        }
     }
 
-    public void update(Meet meet) throws SQLException{
+    public void update(Meet meet) throws SQLException {
         String sql = "update meets set date = ?, address = ?, status = ? where id = ?";
         executeUpdate(sql, meet.getDate(), meet.getAddress(), meet.getStatus().name(), meet.getId());
     }
 
-    public void softDelete(Meet meet) throws SQLException{
+    public void softDelete(Meet meet) throws SQLException {
         String sql = "update meets set status = 'canceled' where id = ?";
         executeUpdate(sql, meet.getId());
     }
 
-    public void setCompleted(Meet meet) throws SQLException{
+    public void setCompleted(Meet meet) throws SQLException {
         String sql = "update meets set status = 'completed' where id = ?";
         executeUpdate(sql, meet.getId());
     }
