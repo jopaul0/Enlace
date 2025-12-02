@@ -31,6 +31,10 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+.idea
+
 ### VS Code ###
 .vscode/
 
