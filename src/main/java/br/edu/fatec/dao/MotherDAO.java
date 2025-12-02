@@ -68,4 +68,9 @@ public class MotherDAO extends DataDAO<Mother> {
         executeUpdate(sql, mother.getId());
     }
 
+    public void activate(Mother mother) throws SQLException{
+        String sql = "update mothers set status='active' where id = ?";
+        executeUpdate(sql, mother.getId());
+    }
+
 }
