@@ -65,9 +65,8 @@ public class MotherFormDialog extends JDialog {
         cpfField.setText(m.getCpf());
         emailField.setText(m.getEmail());
         phoneField.setText(m.getPhone());
-
-        // Nota: O campo address não é carregado no MotherDAO.mapResultSetToList
-        // Caso você corrija o DAO, este campo pode ser preenchido aqui.
+        addressField.setText(m.getAddress());
+        
         nameField.setText(m.getName());
 
         if (m.getBirthday() != null) {

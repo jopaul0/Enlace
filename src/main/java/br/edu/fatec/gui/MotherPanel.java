@@ -19,7 +19,7 @@ public class MotherPanel extends JPanel {
     public MotherPanel() {
         setLayout(new BorderLayout());
 
-        String[] columnNames = {"ID", "Nome", "CPF", "Email", "Telefone", "Aniversário", "Status"};
+        String[] columnNames = {"ID", "Nome", "CPF", "Email", "Telefone", "Endereço", "Aniversário", "Status"};
         tableModel = new DefaultTableModel(columnNames, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -77,6 +77,7 @@ public class MotherPanel extends JPanel {
                         mother.getCpf(),
                         mother.getEmail(),
                         mother.getPhone(),
+                        mother.getAddress(),
                         mother.getBirthday(),
                         mother.getStatus()
                 });
@@ -122,10 +123,10 @@ public class MotherPanel extends JPanel {
             motherToEdit.setCpf((String) tableModel.getValueAt(selectedRow, 2));
             motherToEdit.setEmail((String) tableModel.getValueAt(selectedRow, 3));
             motherToEdit.setPhone((String) tableModel.getValueAt(selectedRow, 4));
-            motherToEdit.setBirthday((LocalDate) tableModel.getValueAt(selectedRow, 5));
-            motherToEdit.setStatus((DefaultStatus) tableModel.getValueAt(selectedRow, 6));
-            // O campo 'address' está faltando pois não é retornado pelo MotherDAO.mapResultSetToList na sua implementação.
-            // O MotherFormDialog lida com isso.
+            motherToEdit.setAddress((String) tableModel.getValueAt(selectedRow, 5));
+            motherToEdit.setBirthday((LocalDate) tableModel.getValueAt(selectedRow, 6));
+            motherToEdit.setStatus((DefaultStatus) tableModel.getValueAt(selectedRow, 7));
+
 
             MotherFormDialog dialog = new MotherFormDialog((JFrame) SwingUtilities.getWindowAncestor(this), motherToEdit);
             dialog.setVisible(true);

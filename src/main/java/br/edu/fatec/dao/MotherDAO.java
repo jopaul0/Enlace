@@ -27,6 +27,7 @@ public class MotherDAO extends DataDAO<Mother> {
             mother.setPhone(rs.getString("phone"));
             mother.setCpf(rs.getString("cpf"));
             mother.setEmail(rs.getString("email"));
+            mother.setAddress(rs.getString("address"));
 
             mother.setStatus(DefaultStatus.valueOf(rs.getString("status")));
             mother.setBirthday(rs.getObject("birthday", LocalDate.class));
