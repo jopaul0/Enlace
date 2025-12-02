@@ -41,6 +41,7 @@ public class MeetPanel extends JPanel {
 
         JButton addButton = new JButton("Adicionar");
         viewDetailsButton = new JButton("Ver Detalhes");
+        JButton editButton = new JButton("Editar");
         viewDetailsButton.setEnabled(false);
 
         completeStatusButton = new JButton("Concluir Encontro");
@@ -53,6 +54,7 @@ public class MeetPanel extends JPanel {
 
         buttonPanel.add(addButton);
         buttonPanel.add(viewDetailsButton);
+        buttonPanel.add(editButton);
         buttonPanel.add(completeStatusButton);
         buttonPanel.add(cancelStatusButton);
         buttonPanel.add(new JSeparator(SwingConstants.VERTICAL));
@@ -64,6 +66,7 @@ public class MeetPanel extends JPanel {
 
         addButton.addActionListener(e -> addMeetAction());
         viewDetailsButton.addActionListener(e -> viewDetailsAction());
+        editButton.addActionListener(e -> editMeetAction());
         completeStatusButton.addActionListener(e -> toggleStatusAction(MeetStatus.completed));
         cancelStatusButton.addActionListener(e -> toggleStatusAction(MeetStatus.canceled));
 
@@ -124,8 +127,38 @@ public class MeetPanel extends JPanel {
         }
     }
 
+    private void editMeetAction() {
+        int selectedRow = meetTable.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Selecione um encontro para editar.", "Atenção", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        try {
+            Long meetId = (Long) tableModel.getValueAt(selectedRow, 0);
+            Meet meetToEdit = controller.findById(meetId);
+
+            if (meetToEdit == null) {
+                JOptionPane.showMessageDialog(this, "Encontro não encontrado no banco de dados.", "Erro", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            MeetFormDialog dialog = new MeetFormDialog((JFrame) SwingUtilities.getWindowAncestor(this), meetToEdit);
+            dialog.setVisible(true);
+
+            if (dialog.isSaved()) {
+                controller.updateMeet(dialog.getMeet());
+                JOptionPane.showMessageDialog(this, "Encontro atualizado com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+                loadMeets();
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Erro ao editar Encontro: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            ex.printStackTrace();
+        }
+    }
+
     private void addMeetAction() {
-        MeetFormDialog dialog = new MeetFormDialog((JFrame) SwingUtilities.getWindowAncestor(this));
+        MeetFormDialog dialog = new MeetFormDialog((JFrame) SwingUtilities.getWindowAncestor(this), null);
         dialog.setVisible(true);
 
         if (dialog.isSaved()) {

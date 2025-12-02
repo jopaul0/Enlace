@@ -29,9 +29,13 @@ public class MeetController {
         Meet existingMeet = findById(meet.getId());
         if (existingMeet == null) {
             System.out.println("Meet not found");
-
         } else {
             meetDAO.update(meet);
+            meetDAO.deleteEnlacesByMeetId(meet.getId());
+
+            if (meet.getEnlaces() != null && !meet.getEnlaces().isEmpty()) {
+                meetDAO.reinsertEnlaces(meet.getId(), meet.getEnlaces());
+            }
 
         }
     }

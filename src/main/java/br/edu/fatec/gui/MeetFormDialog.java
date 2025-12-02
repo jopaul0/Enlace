@@ -29,16 +29,25 @@ public class MeetFormDialog extends JDialog {
 
     private JComboBox<Mother> motherComboBox;
     private JComboBox<Service> serviceComboBox;
+    private JTable enlaceTable; // Adicionado para uso na remoção
     private DefaultTableModel enlaceTableModel;
 
     private List<Mother> activeMothers;
     private List<Service> activeServices;
     private final List<Enlace> currentEnlaces = new ArrayList<>();
     private static final DateTimeFormatter DATETIME_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm");
 
-    public MeetFormDialog(JFrame parent) {
-        super(parent, "Adicionar Encontro", true);
-        this.meet = new Meet();
+
+    public MeetFormDialog(JFrame parent, Meet meetToEdit) {
+        super(parent, meetToEdit == null ? "Adicionar Encontro" : "Editar Encontro", true);
+        this.meet = meetToEdit != null ? meetToEdit : new Meet();
+
+        if (meetToEdit != null) {
+            // Se estiver editando, copia os enlaces existentes
+            this.currentEnlaces.addAll(meetToEdit.getEnlaces());
+        }
 
         try {
             activeMothers = motherController.getAllActives();
@@ -55,9 +64,29 @@ public class MeetFormDialog extends JDialog {
         add(createEnlacePanel(), BorderLayout.CENTER);
         add(createButtonPanel(), BorderLayout.SOUTH);
 
+        if (meetToEdit != null) {
+            populateFields(meetToEdit);
+        }
+
         pack();
         setLocationRelativeTo(parent);
     }
+
+    private void populateFields(Meet m) {
+        dateField.setText(m.getDate().format(DATE_FORMATTER));
+        timeField.setText(m.getDate().format(TIME_FORMATTER));
+        addressField.setText(m.getAddress());
+
+        for(Enlace enlace : m.getEnlaces()) {
+            enlaceTableModel.addRow(new Object[]{
+                    enlace.getMother().getId(),
+                    enlace.getMother().getName(),
+                    enlace.getService().getId(),
+                    enlace.getService().getName()
+            });
+        }
+    }
+
 
     private JPanel createFormPanel() {
         JPanel formPanel = new JPanel(new GridLayout(0, 2, 5, 5));
@@ -77,24 +106,40 @@ public class MeetFormDialog extends JDialog {
         JPanel enlacePanel = new JPanel(new BorderLayout(5, 5));
         enlacePanel.setBorder(BorderFactory.createTitledBorder("Vincular Mães e Serviços"));
 
+        // Painel de Adição
         JPanel addEnlacePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 5));
 
+        // Custom Renderer para exibir apenas o nome
         motherComboBox = new JComboBox<>(activeMothers.toArray(new Mother[0]));
+        motherComboBox.setRenderer(new MotherListCellRenderer());
+
         serviceComboBox = new JComboBox<>(activeServices.toArray(new Service[0]));
+        serviceComboBox.setRenderer(new ServiceListCellRenderer());
+
         JButton addEnlaceButton = new JButton("Adicionar Vínculo");
+        JButton removeEnlaceButton = new JButton("Remover Selecionado");
 
         addEnlacePanel.add(new JLabel("Mãe:"));
         addEnlacePanel.add(motherComboBox);
         addEnlacePanel.add(new JLabel("Serviço:"));
         addEnlacePanel.add(serviceComboBox);
         addEnlacePanel.add(addEnlaceButton);
+        addEnlacePanel.add(removeEnlaceButton);
 
+        // Tabela de Enlaces
         String[] columnNames = {"Mãe (ID)", "Nome da Mãe", "Serviço (ID)", "Nome do Serviço"};
-        enlaceTableModel = new DefaultTableModel(columnNames, 0);
-        JTable enlaceTable = new JTable(enlaceTableModel);
+        enlaceTableModel = new DefaultTableModel(columnNames, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        enlaceTable = new JTable(enlaceTableModel);
         JScrollPane scrollPane = new JScrollPane(enlaceTable);
 
+        // Ações
         addEnlaceButton.addActionListener(e -> addEnlaceAction());
+        removeEnlaceButton.addActionListener(e -> removeEnlaceAction());
 
         enlacePanel.add(addEnlacePanel, BorderLayout.NORTH);
         enlacePanel.add(scrollPane, BorderLayout.CENTER);
@@ -104,7 +149,7 @@ public class MeetFormDialog extends JDialog {
 
     private JPanel createButtonPanel() {
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        JButton saveButton = new JButton("Salvar Encontro");
+        JButton saveButton = new JButton("Salvar");
         JButton cancelButton = new JButton("Cancelar");
 
         saveButton.addActionListener(e -> saveMeet());
@@ -124,8 +169,10 @@ public class MeetFormDialog extends JDialog {
             return;
         }
 
+        // Criar um novo Enlace temporário para checar duplicidade
         Enlace newEnlace = new Enlace(selectedService, selectedMother);
 
+        // Checar duplicidade na lista 'currentEnlaces'
         for (Enlace existing : currentEnlaces) {
             if (existing.getMother().getId().equals(selectedMother.getId()) && existing.getService().getId().equals(selectedService.getId())) {
                 JOptionPane.showMessageDialog(this, "Este vínculo (Mãe + Serviço) já foi adicionado.", "Duplicidade", JOptionPane.WARNING_MESSAGE);
@@ -141,6 +188,28 @@ public class MeetFormDialog extends JDialog {
                 selectedService.getName()
         });
     }
+
+    private void removeEnlaceAction() {
+        int selectedRow = enlaceTable.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Selecione um vínculo na tabela para remover.", "Atenção", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        // Obtém os IDs da linha selecionada
+        Long motherId = (Long) enlaceTableModel.getValueAt(selectedRow, 0);
+        Long serviceId = (Long) enlaceTableModel.getValueAt(selectedRow, 2);
+
+        // Remove da lista interna
+        currentEnlaces.removeIf(enlace ->
+                enlace.getMother().getId().equals(motherId) &&
+                        enlace.getService().getId().equals(serviceId)
+        );
+
+        // Remove da tabela na GUI
+        enlaceTableModel.removeRow(selectedRow);
+    }
+
 
     private void saveMeet() {
         String dateStr = dateField.getText().trim();
@@ -167,7 +236,12 @@ public class MeetFormDialog extends JDialog {
 
         this.meet.setDate(dateTime);
         this.meet.setAddress(address);
-        this.meet.setStatus(MeetStatus.pending);
+
+        if (this.meet.getId() == null) {
+            this.meet.setStatus(MeetStatus.pending);
+        }
+
+        // Define a lista de enlaces atualizada
         this.meet.setEnlaces(currentEnlaces);
 
         this.saved = true;
@@ -180,5 +254,29 @@ public class MeetFormDialog extends JDialog {
 
     public boolean isSaved() {
         return saved;
+    }
+
+    // --- ListCellRenderers para exibir apenas o nome ---
+
+    private static class MotherListCellRenderer extends DefaultListCellRenderer {
+        @Override
+        public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+            super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+            if (value instanceof Mother) {
+                setText(((Mother) value).getName());
+            }
+            return this;
+        }
+    }
+
+    private static class ServiceListCellRenderer extends DefaultListCellRenderer {
+        @Override
+        public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+            super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+            if (value instanceof Service) {
+                setText(((Service) value).getName());
+            }
+            return this;
+        }
     }
 }

@@ -164,9 +164,25 @@ public class MeetDAO extends DataDAO<Meet> {
         }
     }
 
+    public void deleteEnlacesByMeetId(Long meetId) throws SQLException {
+        String sql = "DELETE FROM enlace WHERE idmeets = ?";
+        executeUpdate(sql, meetId);
+    }
+
     public void update(Meet meet) throws SQLException {
         String sql = "update meets set date = ?, address = ?, status = ? where id = ?";
         executeUpdate(sql, meet.getDate(), meet.getAddress(), meet.getStatus().name(), meet.getId());
+    }
+
+    public void reinsertEnlaces(Long meetId, List<Enlace> enlaces) throws SQLException {
+        String enlaceSql = "INSERT INTO enlace (idservices, idmothers, idmeets) VALUES (?, ?, ?)";
+
+        for (Enlace enlace : enlaces) {
+            executeUpdate(enlaceSql,
+                    enlace.getService().getId(),
+                    enlace.getMother().getId(),
+                    meetId);
+        }
     }
 
     public void softDelete(Meet meet) throws SQLException {
