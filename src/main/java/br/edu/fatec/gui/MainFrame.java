@@ -14,6 +14,7 @@ public class MainFrame extends JFrame {
         JTabbedPane tabbedPane = new JTabbedPane();
 
         tabbedPane.addTab("Mães", new MotherPanel());
+        tabbedPane.addTab("Serviços", new ServicePanel());
 
         getContentPane().add(tabbedPane, BorderLayout.CENTER);
     }
