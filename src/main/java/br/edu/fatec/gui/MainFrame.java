@@ -11,6 +11,16 @@ public class MainFrame extends JFrame {
         setSize(800, 600);
         setLocationRelativeTo(null);
 
+        try {
+            String iconPath = "images/logo.png";
+
+            Image icon = new ImageIcon(getClass().getClassLoader().getResource(iconPath)).getImage();
+            setIconImage(icon);
+        } catch (Exception e) {
+            System.err.println("Erro ao carregar o ícone da aplicação: " + e.getMessage());
+        }
+
+
         JTabbedPane tabbedPane = new JTabbedPane();
 
         tabbedPane.addTab("Mães", new MotherPanel());
