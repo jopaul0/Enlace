@@ -45,7 +45,6 @@ public class MeetFormDialog extends JDialog {
         this.meet = meetToEdit != null ? meetToEdit : new Meet();
 
         if (meetToEdit != null) {
-            // Se estiver editando, copia os enlaces existentes
             this.currentEnlaces.addAll(meetToEdit.getEnlaces());
         }
 
@@ -126,7 +125,6 @@ public class MeetFormDialog extends JDialog {
         addEnlacePanel.add(addEnlaceButton);
         addEnlacePanel.add(removeEnlaceButton);
 
-        // Tabela de Enlaces
         String[] columnNames = {"Mãe (ID)", "Nome da Mãe", "Serviço (ID)", "Nome do Serviço"};
         enlaceTableModel = new DefaultTableModel(columnNames, 0) {
             @Override
@@ -137,7 +135,6 @@ public class MeetFormDialog extends JDialog {
         enlaceTable = new JTable(enlaceTableModel);
         JScrollPane scrollPane = new JScrollPane(enlaceTable);
 
-        // Ações
         addEnlaceButton.addActionListener(e -> addEnlaceAction());
         removeEnlaceButton.addActionListener(e -> removeEnlaceAction());
 
@@ -169,10 +166,8 @@ public class MeetFormDialog extends JDialog {
             return;
         }
 
-        // Criar um novo Enlace temporário para checar duplicidade
         Enlace newEnlace = new Enlace(selectedService, selectedMother);
 
-        // Checar duplicidade na lista 'currentEnlaces'
         for (Enlace existing : currentEnlaces) {
             if (existing.getMother().getId().equals(selectedMother.getId()) && existing.getService().getId().equals(selectedService.getId())) {
                 JOptionPane.showMessageDialog(this, "Este vínculo (Mãe + Serviço) já foi adicionado.", "Duplicidade", JOptionPane.WARNING_MESSAGE);
@@ -196,17 +191,14 @@ public class MeetFormDialog extends JDialog {
             return;
         }
 
-        // Obtém os IDs da linha selecionada
         Long motherId = (Long) enlaceTableModel.getValueAt(selectedRow, 0);
         Long serviceId = (Long) enlaceTableModel.getValueAt(selectedRow, 2);
 
-        // Remove da lista interna
         currentEnlaces.removeIf(enlace ->
                 enlace.getMother().getId().equals(motherId) &&
                         enlace.getService().getId().equals(serviceId)
         );
 
-        // Remove da tabela na GUI
         enlaceTableModel.removeRow(selectedRow);
     }
 
@@ -241,7 +233,6 @@ public class MeetFormDialog extends JDialog {
             this.meet.setStatus(MeetStatus.pending);
         }
 
-        // Define a lista de enlaces atualizada
         this.meet.setEnlaces(currentEnlaces);
 
         this.saved = true;
@@ -255,8 +246,6 @@ public class MeetFormDialog extends JDialog {
     public boolean isSaved() {
         return saved;
     }
-
-    // --- ListCellRenderers para exibir apenas o nome ---
 
     private static class MotherListCellRenderer extends DefaultListCellRenderer {
         @Override
