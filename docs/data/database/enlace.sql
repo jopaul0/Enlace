@@ -41,6 +41,7 @@ CREATE TABLE `enlace` (
 
 LOCK TABLES `enlace` WRITE;
 /*!40000 ALTER TABLE `enlace` DISABLE KEYS */;
+INSERT INTO `enlace` VALUES (1,1,1),(1,1,5),(2,1,1),(2,1,2),(2,2,5),(3,2,3),(2,3,4),(3,4,5);
 /*!40000 ALTER TABLE `enlace` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -57,7 +58,7 @@ CREATE TABLE `meets` (
   `address` varchar(200) NOT NULL,
   `status` enum('pending','canceled','completed') DEFAULT 'pending',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -66,6 +67,7 @@ CREATE TABLE `meets` (
 
 LOCK TABLES `meets` WRITE;
 /*!40000 ALTER TABLE `meets` DISABLE KEYS */;
+INSERT INTO `meets` VALUES (1,'2025-11-14 00:13:00','Rua do Encontro, Sala 3','canceled'),(2,'2025-11-07 00:13:35','Centro Comunitário, Auditório','completed'),(3,'2025-11-22 00:13:35','Online (Plataforma Zoom)','completed'),(4,'2025-11-11 00:13:35','Escritório Central, Sala 1','canceled'),(5,'2026-07-12 20:59:00','Amarelinho Lanches','pending');
 /*!40000 ALTER TABLE `meets` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -89,7 +91,7 @@ CREATE TABLE `mothers` (
   UNIQUE KEY `cpf` (`cpf`),
   UNIQUE KEY `email` (`email`),
   UNIQUE KEY `phone` (`phone`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -98,6 +100,7 @@ CREATE TABLE `mothers` (
 
 LOCK TABLES `mothers` WRITE;
 /*!40000 ALTER TABLE `mothers` DISABLE KEYS */;
+INSERT INTO `mothers` VALUES (1,'claudia','111111111111','pelega@hotmail.com','12992196356','Rua dos Elfos, 49','1983-08-14','active'),(2,'Ana Silva','111.111.111-11','ana.silva@email.com','(11) 98765-4321','Rua das Flores, 100','1990-05-15','active'),(3,'Beatriz Costa','222.222.222-21','beatriz.costa@email.com','(21) 99887-6542','Rua dos Boiadeiros, 43','1986-11-20','active'),(4,'Carla Oliveira','333.333.333-33','carla.oliver@email.com','(31) 97654-3210','Travessa da Paz, 50','1995-03-10','active');
 /*!40000 ALTER TABLE `mothers` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -115,7 +118,7 @@ CREATE TABLE `services` (
   `status` enum('active','inactive') DEFAULT 'active',
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -124,6 +127,7 @@ CREATE TABLE `services` (
 
 LOCK TABLES `services` WRITE;
 /*!40000 ALTER TABLE `services` DISABLE KEYS */;
+INSERT INTO `services` VALUES (1,'Apoio Psicológico','Sessões de suporte emocional e psicológico.','active'),(2,'Consultoria Jurídica','Orientação sobre direitos e deveres legais.','active'),(3,'Grupo de Mães','Encontros para troca de experiências e apoio mútuo.','active'),(4,'Oficina de Artesanato','Aulas práticas de desenvolvimento de habilidades manuais.','inactive');
 /*!40000 ALTER TABLE `services` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -136,4 +140,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-11-08 10:10:09
+-- Dump completed on 2025-12-02 22:27:40
